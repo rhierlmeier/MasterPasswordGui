@@ -17,18 +17,36 @@
 
 package com.lyndir.masterpassword.gui;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.*;
-import com.lyndir.lhunath.opal.system.logging.Logger;
-import com.lyndir.lhunath.opal.system.util.TypeUtils;
-
-import java.io.*;
+import java.awt.AWTException;
+import java.awt.CheckboxMenuItem;
+import java.awt.Image;
+import java.awt.Menu;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.jar.*;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.CharSource;
+import com.google.common.io.Resources;
+import com.lyndir.lhunath.opal.system.logging.Logger;
 
 
 /**
@@ -56,7 +74,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {
         }
 
-        TypeUtils.<GUI>newInstance( "com.lyndir.masterpassword.gui.platform.mac.AppleGUI" ).or( new GUI() ).open();
+       new GUI().open();
     }
 
     private static void checkUpdate() {
@@ -96,9 +114,74 @@ public class GUI implements UnlockFrame.SignInCallback {
                     unlockFrame.setVisible( true );
                 else
                     passwordFrame.setVisible( true );
+                
+                installInTray();
+                
+                
             }
         } );
     }
+    
+    private void installInTray() {
+    	
+    	if (!SystemTray.isSupported()) {
+            return;
+        }
+    	
+    	final PopupMenu popup = new PopupMenu();
+        final TrayIcon trayIcon =
+                new TrayIcon(createImage("/media/masterpassword-16.png", "tray icon"));
+        trayIcon.setImageAutoSize(true);
+        
+        final SystemTray tray = SystemTray.getSystemTray();
+        
+        MenuItem exitItem = new MenuItem("Exit");
+        MenuItem openItem = new MenuItem("Open");
+        //Add components to pop-up menu
+        popup.add(exitItem);
+        popup.add(openItem);
+        
+        ActionListener openListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                if (passwordFrame == null)
+                    unlockFrame.setVisible( true );
+                else
+                    passwordFrame.setVisible( true );
+			}
+		};
+        
+        openItem.addActionListener(openListener);
+        
+        exitItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+        
+        trayIcon.addActionListener(openListener);
+        trayIcon.setPopupMenu(popup);
+       
+        try {
+            tray.add(trayIcon);
+        } catch (AWTException e) {
+            System.out.println("TrayIcon could not be added.");
+        }    	
+    	
+    }
+    
+    protected static Image createImage(String path, String description) {
+        URL imageURL = GUI.class.getResource(path);
+         
+        if (imageURL == null) {
+            System.err.println("Resource not found: " + path);
+            return null;
+        } else {
+            return (new ImageIcon(imageURL, description)).getImage();
+        }
+    }    
 
     @Override
     public void signedIn(final User user) {

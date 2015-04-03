@@ -93,6 +93,8 @@ public class UnlockFrame extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("media/masterpassword-16.png"));
         setIconImage(icon.getImage());
         
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        
     }
 
     protected void repack() {
