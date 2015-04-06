@@ -129,7 +129,7 @@ public class GUI implements UnlockFrame.SignInCallback {
     	
     	final PopupMenu popup = new PopupMenu();
         final TrayIcon trayIcon =
-                new TrayIcon(createImage("/media/masterpassword-16.png", "tray icon"));
+                new TrayIcon(createImage("/media/masterpassword_32.png", "tray icon"));
         trayIcon.setImageAutoSize(true);
         
         final SystemTray tray = SystemTray.getSystemTray();
