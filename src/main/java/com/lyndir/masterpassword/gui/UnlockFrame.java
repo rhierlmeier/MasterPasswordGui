@@ -41,7 +41,7 @@ public class UnlockFrame extends JFrame {
     }
     public UnlockFrame(final SignInCallback signInCallback)
             throws HeadlessException {
-        super( "Unlock Master Password" );
+        super( RB.msg("unlock"));
         this.signInCallback = signInCallback;
 
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
@@ -58,7 +58,7 @@ public class UnlockFrame extends JFrame {
         } );
 
         // Sign In
-        JPanel signInBox = Components.boxLayout( BoxLayout.LINE_AXIS, Box.createGlue(), signInButton = Components.button( "Sign In" ),
+        JPanel signInBox = Components.boxLayout( BoxLayout.LINE_AXIS, Box.createGlue(), signInButton = Components.button(RB.msg("signin")),
                                                  Box.createGlue() );
         signInBox.setBackground( null );
 
@@ -75,9 +75,9 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.setOpaque( true );
         authenticationContainer.setBackground( Res.colors().controlBg() );
         authenticationContainer.setBorder( BorderFactory.createEmptyBorder( 20, 20, 20, 20 ) );
-        identiconLabel.setFont( Res.emoticonsFont().deriveFont( 14.f ) );
-        identiconLabel.setToolTipText(
-                "A representation of your identity across all Master Password apps.\nIt should always be the same." );
+        identiconLabel.setFont( Res.emoticonsFont().deriveFont( 10.f ) );
+        identiconLabel.setToolTipText(RB.msg("UnlockFrame.represent")
+                );
         signInButton.addActionListener( new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -115,8 +115,8 @@ public class UnlockFrame extends JFrame {
         authenticationContainer.add( authenticationPanel );
         authenticationContainer.add( Components.stud() );
 
-        final JCheckBox incognitoCheckBox = Components.checkBox( "Incognito" );
-        incognitoCheckBox.setToolTipText( "Log in without saving any information." );
+        final JCheckBox incognitoCheckBox = Components.checkBox( RB.msg("Incognito") );
+        incognitoCheckBox.setToolTipText( RB.msg("Incognito.tooltip") );
         incognitoCheckBox.setSelected( getIncognito() );
         incognitoCheckBox.addItemListener( new ItemListener() {
             @Override
@@ -165,7 +165,7 @@ public class UnlockFrame extends JFrame {
         char[] repeated = authenticationPanel.getMasterPasswordRepeated();
         
         if(!Arrays.equals(masterPassword, repeated)) {
-            identiconLabel.setText( "PW invalid" );
+            identiconLabel.setText( RB.msg("pwInvalid") );
         	return false;
         }
         boolean enabled = !fullName.isEmpty() && masterPassword.length > 0;
@@ -191,7 +191,7 @@ public class UnlockFrame extends JFrame {
             signInComponent.setEnabled( false );
 
         signInButton.setEnabled( false );
-        signInButton.setText( "Signing In..." );
+        signInButton.setText( RB.msg("signingIn") );
 
         Res.execute( this, new Runnable() {
             @Override
@@ -211,9 +211,9 @@ public class UnlockFrame extends JFrame {
                     SwingUtilities.invokeLater( new Runnable() {
                         @Override
                         public void run() {
-                            JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), "Sign In Failed", JOptionPane.ERROR_MESSAGE );
+                            JOptionPane.showMessageDialog( null, e.getLocalizedMessage(), RB.msg("signinIn.failed"), JOptionPane.ERROR_MESSAGE );
                             authenticationPanel.reset();
-                            signInButton.setText( "Sign In" );
+                            signInButton.setText( RB.msg("signin") );
                             for (JComponent signInComponent : signInComponents)
                                 signInComponent.setEnabled( true );
                             checkSignIn();

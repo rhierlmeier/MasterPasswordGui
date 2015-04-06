@@ -19,7 +19,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class IncognitoAuthenticationPanel extends AuthenticationPanel implements DocumentListener, ActionListener {
 
-    private final JTextField     fullNameField;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private final JTextField     fullNameField;
     private final JPasswordField masterPasswordField;
     
     private final JPasswordField repeateMasterPasswordField;
@@ -30,7 +34,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
         super( unlockFrame );
         add( Components.stud() );
 
-        JLabel fullNameLabel = Components.label( "Full Name:" );
+        JLabel fullNameLabel = Components.label( RB.msg("fullName"));
         add( fullNameLabel );
 
         fullNameField = Components.textField();
@@ -41,7 +45,7 @@ public class IncognitoAuthenticationPanel extends AuthenticationPanel implements
         add( Components.stud() );
 
         // Master Password
-        JLabel masterPasswordLabel = Components.label( "Master Password:" );
+        JLabel masterPasswordLabel = Components.label( RB.msg("masterPassword") );
         add( masterPasswordLabel );
 
         masterPasswordField = Components.passwordField();

@@ -34,7 +34,7 @@ public abstract class AuthenticationPanel extends Components.GradientPanel {
         } );
         add( Box.createVerticalGlue() );
 
-        avatarLabel.setToolTipText( "The avatar for your user.  Click to change it." );
+        avatarLabel.setToolTipText( RB.msg("avatar.tooltip") );
     }
 
     protected void updateUser(boolean repack) {

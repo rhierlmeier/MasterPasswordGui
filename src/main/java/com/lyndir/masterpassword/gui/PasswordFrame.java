@@ -56,14 +56,14 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         root.add( Components.borderPanel( sitePanel, BorderFactory.createRaisedBevelBorder(), Res.colors().frameBg() ) );
 
         // User
-        sitePanel.add( Components.label( strf( "Generating passwords for: %s", user.getFullName() ), SwingConstants.CENTER ) );
+        sitePanel.add( Components.label( RB.msg( "generating", user.getFullName() ), SwingConstants.CENTER ) );
         sitePanel.add( Components.stud() );
 
         // Site Name
-        sitePanel.add( Components.label( "Site Name:" ) );
+        sitePanel.add( Components.label( RB.msg("sitename") ) );
         JComponent siteControls = Components.boxLayout( BoxLayout.LINE_AXIS, //
                                                         siteNameField = Components.textField(), Components.stud(),
-                                                        siteAddButton = Components.button( "Add Site" ) );
+                                                        siteAddButton = Components.button( RB.msg("addsite")));
         siteNameField.getDocument().addDocumentListener( this );
         siteNameField.addActionListener( new ActionListener() {
             @Override
@@ -141,7 +141,7 @@ public class PasswordFrame extends JFrame implements DocumentListener {
         } );
 
         // Mask
-        maskPasswordField = Components.checkBox( "Hide Password" );
+        maskPasswordField = Components.checkBox( RB.msg("hidePassword") );
         maskPasswordField.setAlignmentX( Component.CENTER_ALIGNMENT );
         maskPasswordField.setSelected( true );
         maskPasswordField.addItemListener( new ItemListener() {

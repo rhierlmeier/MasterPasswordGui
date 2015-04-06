@@ -27,12 +27,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ModelAuthenticationPanel extends AuthenticationPanel implements ItemListener, ActionListener, DocumentListener {
 
-    @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( ModelAuthenticationPanel.class );
 
     private final JComboBox<ModelUser> userField;
     private final JLabel               masterPasswordLabel;
     private final JPasswordField       masterPasswordField;
+    private final JPasswordField       repeatPasswordField;
 
     public ModelAuthenticationPanel(final UnlockFrame unlockFrame) {
         super( unlockFrame );
@@ -51,7 +51,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         } );
 
         // User
-        JLabel userLabel = Components.label( "User:" );
+        JLabel userLabel = Components.label( RB.msg("user") );
         add( userLabel );
 
         userField = Components.comboBox( readConfigUsers() );
@@ -71,13 +71,18 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
         add( Components.stud() );
 
         // Master Password
-        masterPasswordLabel = Components.label( "Master Password:" );
+        masterPasswordLabel = Components.label( RB.msg("masterPassword" ));
         add( masterPasswordLabel );
 
         masterPasswordField = Components.passwordField();
         masterPasswordField.addActionListener( this );
         masterPasswordField.getDocument().addDocumentListener( this );
         add( masterPasswordField );
+        
+        repeatPasswordField = Components.passwordField();
+        repeatPasswordField.addActionListener( this );
+        repeatPasswordField.getDocument().addDocumentListener( this );
+        add( repeatPasswordField );
     }
 
     @Override
@@ -118,7 +123,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
     
     @Override
     public char[] getMasterPasswordRepeated() {
-    	return masterPasswordField.getPassword();
+    	return repeatPasswordField.getPassword();
     }
     
 
@@ -130,8 +135,8 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         String fullName = JOptionPane.showInputDialog( ModelAuthenticationPanel.this, //
-                                                                       "Enter your full name, ensuring it is correctly spelled and capitalized:",
-                                                                       "New User", JOptionPane.QUESTION_MESSAGE );
+                        		                                       RB.msg("newUser.msg"),
+                                                                       RB.msg("newUser"), JOptionPane.QUESTION_MESSAGE );
                         MPUserFileManager.get().addUser( new MPUser( fullName ) );
                         userField.setModel( new DefaultComboBoxModel<>( readConfigUsers() ) );
                         updateUser( true );
@@ -149,9 +154,9 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                             return;
 
                         if (JOptionPane.showConfirmDialog( ModelAuthenticationPanel.this, //
-                                                       strf( "Are you sure you want to delete the user and sites remembered for:\n%s.",
+                                                       RB.msg( "delUser.msg",
                                                              deleteUser.getFullName() ), //
-                                                       "Delete User", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.CANCEL_OPTION)
+                                                       RB.msg("delUser"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE ) == JOptionPane.CANCEL_OPTION)
                             return;
 
                         MPUserFileManager.get().deleteUser( deleteUser.getModel() );
@@ -159,7 +164,7 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                         updateUser( true );
                     }
                 } );
-                setToolTipText( "Delete the selected user." );
+                setToolTipText( RB.msg("delUser.tooltip") );
             }
         }, new JButton( Res.iconQuestion() ) {
             {
@@ -167,12 +172,12 @@ public class ModelAuthenticationPanel extends AuthenticationPanel implements Ite
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         JOptionPane.showMessageDialog( ModelAuthenticationPanel.this, //
-                                                       strf( "Reads users and sites from the directory at:\n%s",
+                                                       RB.msg( "help.msg",
                                                              MPUserFileManager.get().getPath().getAbsolutePath() ), //
-                                                       "Help", JOptionPane.INFORMATION_MESSAGE );
+                                                       RB.msg("help"), JOptionPane.INFORMATION_MESSAGE );
                     }
                 } );
-                setToolTipText( "More information." );
+                setToolTipText(RB.msg("help.tooltip") );
             }
         } );
     }

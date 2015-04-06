@@ -56,7 +56,6 @@ import com.lyndir.lhunath.opal.system.logging.Logger;
  */
 public class GUI implements UnlockFrame.SignInCallback {
 
-    @SuppressWarnings("UnusedDeclaration")
     private static final Logger logger = Logger.get( GUI.class );
 
     private final UnlockFrame unlockFrame = new UnlockFrame( this );
@@ -167,7 +166,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {
-            System.out.println("TrayIcon could not be added.");
+        	logger.wrn(e, "TrayIcon could not be added.");
         }    	
     	
     }
@@ -176,7 +175,7 @@ public class GUI implements UnlockFrame.SignInCallback {
         URL imageURL = GUI.class.getResource(path);
          
         if (imageURL == null) {
-            System.err.println("Resource not found: " + path);
+        	logger.wrn("Resource not found: " + path);
             return null;
         } else {
             return (new ImageIcon(imageURL, description)).getImage();
